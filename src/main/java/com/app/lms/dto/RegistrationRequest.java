@@ -1,9 +1,15 @@
 package com.app.lms.dto;
 
-public class UserDTO {
-    private Long id;
+import lombok.*;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class RegisterUser {
     private String email;
     private String username;
     private String password;
     private String contactInformation;
+    private String profilePictureUrl;
 }
