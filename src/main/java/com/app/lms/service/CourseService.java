@@ -1,15 +1,16 @@
 package com.app.lms.service;
 
-import com.app.lms.dto.CourseDTO;
-import com.app.lms.dto.CreateCourseDTO;
+import com.app.lms.dto.CourseRequest;
+import com.app.lms.dto.CourseResponse;
+
 
 import java.util.List;
 
 public interface CourseService {
-    List<CourseDTO> getAllCourses();
-    CourseDTO getCourseById(Long id);
-    CourseDTO saveCourse(CreateCourseDTO createCourseDTO, long id);
-    CourseDTO updateCourse(CourseDTO courseDTO);
-    void deleteCourse(Long id);
+    List<CourseResponse> getAllCourses();
+    CourseResponse getCourseById(Long id);
+    CourseResponse saveCourse(CourseRequest courseRequest, Long instructorId);
+    CourseResponse updateCourse(CourseRequest courseRequest);
+    void deleteCourse(Long courseId);
     void enrollStudent(Long courseId, Long studentId);
 }

@@ -7,12 +7,11 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class CourseRequest {
+public class CourseResponse {
     private String title;
     private String description;
     private String category;

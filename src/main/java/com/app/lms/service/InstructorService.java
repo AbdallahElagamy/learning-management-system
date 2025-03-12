@@ -1,11 +1,10 @@
 package com.app.lms.service;
 
-import com.app.lms.dto.InstructorDTO;
-import com.app.lms.dto.RegisterUserDTO;
+import com.app.lms.dto.InstructorResponse;
 
 import java.util.List;
 
 public interface InstructorService {
-    InstructorDTO addInstructor(RegisterUserDTO registerUserDTO);
-    InstructorDTO getInstructorById(Long id);
+    List<InstructorResponse> getAllInstructors();
+    InstructorResponse getInstructorById(Long instructorId);
 }

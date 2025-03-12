@@ -13,7 +13,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class Instructor extends User {
-
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "instructor",
             orphanRemoval = true)

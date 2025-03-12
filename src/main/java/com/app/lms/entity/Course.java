@@ -18,26 +18,18 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
-
     private String description;
-
     private String category;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id")
     private Instructor instructor;
-
     private BigDecimal price;
-
     private double rating;
-
     @ManyToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "courses")
     private Set<Student> students;
-
     @OneToMany(mappedBy = "course")
     private Set<Rating> ratings;
 }

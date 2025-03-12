@@ -1,46 +1,43 @@
 package com.app.lms.service;
 
-import com.app.lms.dto.RegisterUserDTO;
-import com.app.lms.dto.StudentDTO;
+import com.app.lms.dto.StudentResponse;
 import com.app.lms.entity.Student;
-import com.app.lms.entity.enums.Role;
 import com.app.lms.exception.custom.ResourceNotFoundException;
 import com.app.lms.mapper.StudentMapper;
 import com.app.lms.repository.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Optional;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
 
-    @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper) {
-        this.studentRepository = studentRepository;
-        this.studentMapper = studentMapper;
-    }
-
     @Override
-    public StudentDTO addStudent(RegisterUserDTO registerUserDTO) {
-        Student student = studentMapper.toStudent(registerUserDTO);
-        student.setRegistrationDate(Timestamp.from(Instant.now()));
-        student.setRole(Role.STUDENT);
-        studentRepository.save(student);
-        return studentMapper.toStudentDTO(student);
-    }
-
-    @Override
-    public StudentDTO getStudentByID(Long id) {
-        Optional<Student> student = studentRepository.findById(id);
-        if (student.isEmpty()) {
-            throw new ResourceNotFoundException("Student not found");
+    public List<StudentResponse> getAllStudents() {
+        try {
+            List<Student> students = studentRepository.findAll();
+            return students.stream()
+                    .map(studentMapper::toStudentResponse)
+                    .toList();
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while fetching the students");
         }
-        return studentMapper.toStudentDTO(student.get());
+    }
+
+    @Override
+    public StudentResponse getStudentByID(Long studentId) {
+        try {
+            Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+            return studentMapper.toStudentResponse(student);
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Student not found");
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while fetching the student");
+        }
     }
 }

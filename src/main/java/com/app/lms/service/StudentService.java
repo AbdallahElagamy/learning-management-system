@@ -1,10 +1,10 @@
 package com.app.lms.service;
 
-import com.app.lms.dto.RegisterUserDTO;
-import com.app.lms.dto.StudentDTO;
-import com.app.lms.entity.enums.Role;
+import com.app.lms.dto.StudentResponse;
+
+import java.util.List;
 
 public interface StudentService {
-    StudentDTO addStudent(RegisterUserDTO registerUserDTO);
-    StudentDTO getStudentByID(Long id);
+    List<StudentResponse> getAllStudents();
+    StudentResponse getStudentByID(Long studentId);
 }

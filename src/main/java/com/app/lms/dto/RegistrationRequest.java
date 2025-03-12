@@ -1,17 +1,15 @@
 package com.app.lms.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class InstructorResponse {
+public class RegistrationRequest {
     private String email;
     private String username;
     private String password;
     private String contactInformation;
+    private String profilePictureUrl;
 }

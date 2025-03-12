@@ -1,9 +1,9 @@
 package com.app.lms.controller;
 
-import com.app.lms.dto.CourseDTO;
-import com.app.lms.dto.CreateCourseDTO;
+import com.app.lms.dto.CourseRequest;
+import com.app.lms.dto.CourseResponse;
 import com.app.lms.service.CourseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,47 +11,46 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/courses")
+@RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
 
-    @Autowired
-    public CourseController(CourseService courseService) {
-        this.courseService = courseService;
-    }
-
     @GetMapping("")
     public ResponseEntity<?> getAllCourses() {
-        List<CourseDTO> courses = courseService.getAllCourses();
+        List<CourseResponse> courses = courseService.getAllCourses();
         return ResponseEntity.ok(courses);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCourse(@RequestBody CreateCourseDTO createCourseDTO, @RequestParam Long id) {
-        CourseDTO courseDTO = courseService.saveCourse(createCourseDTO, id);
+    public ResponseEntity<?> addCourse(@RequestBody CourseRequest courseRequest, @RequestParam Long courseId) {
+        CourseResponse courseResponse = courseService.saveCourse(courseRequest, courseId);
+        return ResponseEntity.ok(courseResponse);
+    }
+
+    @GetMapping("/{courseId}")
+    public ResponseEntity<?> getCourseById(@PathVariable Long courseId) {
+        CourseResponse courseDTO = courseService.getCourseById(courseId);
         return ResponseEntity.ok(courseDTO);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getCourseById(@PathVariable Long id) {
-        CourseDTO courseDTO = courseService.getCourseById(id);
-        return ResponseEntity.ok(courseDTO);
+    @PutMapping("/{courseId}")
+    public ResponseEntity<?> editCourse(@PathVariable Long courseId, @RequestBody CourseRequest courseRequest) {
+        CourseResponse courseResponse = courseService.updateCourse(courseRequest);
+        return ResponseEntity.ok(courseResponse);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> editCourse(@PathVariable Long id, @RequestBody CourseDTO courseDTO) {
-        courseDTO = courseService.updateCourse(courseDTO);
-        return ResponseEntity.ok(courseDTO);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourse(id);
+    @DeleteMapping("/{courseId}")
+    public ResponseEntity<?> deleteCourse(@PathVariable Long courseId) {
+        courseService.deleteCourse(courseId);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{id}/enroll")
-    public ResponseEntity<?> enrollStudent(@PathVariable Long id, @RequestParam Long studentId) {
-        courseService.enrollStudent(id, studentId);
+    @PostMapping("/{courseId}/enroll")
+    public ResponseEntity<?> enrollStudent(@PathVariable Long courseId, @RequestParam Long studentId) {
+        courseService.enrollStudent(courseId, studentId);
         return ResponseEntity.ok().build();
     }
+
+
+
 }

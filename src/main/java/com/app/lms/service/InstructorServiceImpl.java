@@ -1,46 +1,42 @@
 package com.app.lms.service;
 
-import com.app.lms.dto.InstructorDTO;
-import com.app.lms.dto.RegisterUserDTO;
+import com.app.lms.dto.InstructorResponse;
 import com.app.lms.entity.Instructor;
-import com.app.lms.entity.enums.Role;
 import com.app.lms.exception.custom.ResourceNotFoundException;
 import com.app.lms.mapper.InstructorMapper;
 import com.app.lms.repository.InstructorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Optional;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class InstructorServiceImpl implements InstructorService {
-
     private final InstructorRepository instructorRepository;
     private final InstructorMapper instructorMapper;
 
-    @Autowired
-    public InstructorServiceImpl(InstructorRepository instructorRepository, InstructorMapper instructorMapper) {
-        this.instructorRepository = instructorRepository;
-        this.instructorMapper = instructorMapper;
-    }
-
     @Override
-    public InstructorDTO addInstructor(RegisterUserDTO registerUserDTO) {
-        Instructor instructor = instructorMapper.toInstructor(registerUserDTO);
-        instructor.setRegistrationDate(Timestamp.from(Instant.now()));
-        instructor.setRole(Role.STUDENT);
-        instructorRepository.save(instructor);
-        return instructorMapper.toInstructorDTO(instructor);
-    }
-
-    @Override
-    public InstructorDTO getInstructorById(Long id) {
-        Optional<Instructor> instructor = instructorRepository.findById(id);
-        if (instructor.isEmpty()) {
-            throw new ResourceNotFoundException("Istructor Not Found");
+    public InstructorResponse getInstructorById(Long instructorId) {
+        try {
+            Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(() -> new ResourceNotFoundException("Instructor not found"));
+            return instructorMapper.toInstructorResponse(instructor);
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Instructor not found");
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while fetching the instructor");
         }
-        return instructorMapper.toInstructorDTO(instructor.get());
+    }
+
+    @Override
+    public List<InstructorResponse> getAllInstructors() {
+        try {
+            List<Instructor> instructors = instructorRepository.findAll();
+            return instructors.stream()
+                    .map(instructorMapper::toInstructorResponse)
+                    .toList();
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while fetching the instructors");
+        }
     }
 }

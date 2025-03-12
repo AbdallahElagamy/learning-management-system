@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class StudentResponse {
-    private String email;
-    private String username;
-    private String password;
-    private String contactInformation;
+public class RegistrationResponse {
+    private String message;
+    private int statusCode;
+    private String error;
+
 }
