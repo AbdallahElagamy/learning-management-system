@@ -16,12 +16,12 @@ create table user
 );
 
 create table student
-(
-    id bigint not null
-        primary key,
-    constraint FK_student_user
-        foreign key (id) references user (id)
-);
+  (
+      id bigint not null
+          primary key,
+      constraint FK_student_user
+          foreign key (id) references user (id)
+  );
 
 create table instructor
 (

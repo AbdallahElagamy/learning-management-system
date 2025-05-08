@@ -13,5 +13,4 @@ public class RegistrationResponse {
     private String message;
     private int statusCode;
     private String error;
-
 }
